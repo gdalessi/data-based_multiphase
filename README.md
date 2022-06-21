@@ -6,12 +6,12 @@ In particular, it is possible to employ this code and the associated trained Art
 1) Euler-Euler simulations
 2) Euler-Langrange simulations
 
-The Euler-Euler approach treates two phases as interpenetrating continua, twoPhaseEulerFOAM solver in OpenFOAM-3.x is employed for this simulation. 
-The Euler-Language approach, instead, solves the continuous phase on eulerian grids and tracks each particle and solve their behavior using Newtons equations of motion.
-This is accomplished by means of CFDEM software.
+With an Euler-Euler approach, the two phases are seen as interpenetrating continua. The solver: twoPhaseEulerFOAM in OpenFOAM-3.x is employed for this simulation. 
+The Euler-Language approach, instead, solves the continuous phase on eulerian grids and tracks each particle to solve their behavior using Newtons equations of motion.
+This is accomplished by means of the CFDEM software.
 
-In the folder "code_openfoam", it is possible to find the files to be included in OpenFOAM.
-In the folder "trained_network", it is possible to find the trained ANN, as well as additional files required to normalize the simulation data (i.e., the mean
+In the folder "code_openfoam", it is possible to find the files to be included in OpenFOAM to read the network and get the prediction.
+In the folder "trained_network", it is possible to find a trained ANN, as well as additional files required to normalize the simulation data (i.e., the mean
 and the standard deviation of the training data). 
 The file "revisedNNmodel_TFM_DragCorrection.pdf" contains detailed information on how the approach works and the required files.
 
