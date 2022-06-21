@@ -1,4 +1,4 @@
-Data-based drag model for multiphase flows
+# Data-based drag model for multiphase flows
 
 The aim of this code is to include Artificial Neural Network-based models in CFD simulations of gas-solid systems.
 In particular, it is possible to employ this code and the associated trained Artificial Neural Network (ANN) for:
