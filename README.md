@@ -16,6 +16,9 @@ and the standard deviation of the training data).
 The file "revisedNNmodel_TFM_DragCorrection.pdf" contains detailed information on how the approach works and the required files.
 
 The network was trained in Keras, and it was adapted to OpenFOAM format by means of keras2cpp (https://github.com/pplonski/keras2cpp).
+The number of layers and neurons for the ANN was found by means of the Bayesian optimization, a tool to construct a probabilistic model to converge to 
+the best combination of hyperparameters, given a design space in input. Early stopping was used to prevent the network from overfitting.
+
 Additional information on the approach works can be found in the following papers:
 
 - Jiang, Y., Chen, X., Kolehmainen, J., Kevrekidis, I. G., Ozel, A., & Sundaresan, S. (2021). Development of data-driven filtered drag model for industrial-scale fluidized beds. Chemical Engineering Science, 230, 116235.
