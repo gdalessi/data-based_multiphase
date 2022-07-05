@@ -19,7 +19,7 @@ The network was trained in Keras, and it was adapted to OpenFOAM format by means
 The number of layers and neurons for the ANN was found by means of the Bayesian optimization, a tool to construct a probabilistic model to converge to 
 the best combination of hyperparameters, given a design space in input. Early stopping was used to prevent the network from overfitting.
 
-Additional information on the approach works can be found in the following papers:
+Additional information on the approach can be found in the following papers:
 
 - Jiang, Y., Chen, X., Kolehmainen, J., Kevrekidis, I. G., Ozel, A., & Sundaresan, S. (2021). Development of data-driven filtered drag model for industrial-scale fluidized beds. Chemical Engineering Science, 230, 116235.
 - Jiang, Y., Kolehmainen, J., Gu, Y., Kevrekidis, Y. G., Ozel, A., & Sundaresan, S. (2019). Neural-network-based filtered drag model for gas-particle flows. Powder Technology, 346, 403-413.
