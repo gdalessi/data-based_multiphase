@@ -70,7 +70,7 @@ settings ={                                                                     
     # Number of iterations for the optimizer (int)                              #
     "iterations_optimizer"      : 30,                                           #
     # Acquisition function to be utilized (string)                              #
-    "acquisitionFunction"       : "EI"                                          #
+    "acquisitionFunction"       : "EI",                                         #
     # Settings for the first iteration of the optimizer (int/int/string/float)  #
     "initial_neurons"           : 16,                                           #
     "initial_layers"            : 1,                                            #
