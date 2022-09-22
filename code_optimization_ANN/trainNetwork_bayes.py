@@ -13,7 +13,7 @@ MODULE: trainNetwork_bayes.py
 
 @Additional notes:
     This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-    Please report any bug to: giuseppe.dalessio@ulb.ac.be
+    Please report any bug to: gd6644@princeton.edu
 
 '''
 
@@ -54,42 +54,49 @@ import OpenMORe.model_order_reduction as model_order_reduction
 from OpenMORe.utilities import *
 import tensorflow as tf
 
+#################################################################################
+# Dictionary with the instruction for the algorithm:                            #
+settings ={                                                                     #
+    ##### DATA PREPROCESSING SETTINGS ######                                    #
+    # Centering and scaling options (string/string)                             #
+    "centering_method"          : "mean",                                       #
+    "scaling_method"            : "auto",                                       #
+    # Percentage of input data to be used for training (int)                    #
+    "training_ratio"            : 70, #%                                        #
+                                                                                #
+    ##### ANN AND OPTIMIZER SETTINGS #####                                      #
+    # Number of epochs for the ANN (int)                                        #
+    "network_epochs"            : 500,                                          #
+    # Number of iterations for the optimizer (int)                              #
+    "iterations_optimizer"      : 30,                                           #
+    # Acquisition function to be utilized (string)                              #
+    "acquisitionFunction"       : "EI"                                          #
+    # Settings for the first iteration of the optimizer (int/int/string/float)  #
+    "initial_neurons"           : 16,                                           #
+    "initial_layers"            : 1,                                            #
+    "initial_activation"        : "relu",                                       #
+    "initial_learningRate"      : 1e-4,                                         #
+                                                                                #
+    ##### DESIGN SPACE SETTINGS #####                                           #
+    # Lower and upper bound for number of layers (int/int)                      #
+    "layers_lowerBound"         : 1,                                            #
+    "layers_upperBound"         : 25,                                           #
+    # Lower and upper bound for number of neurons (int/int)                     #
+    "neurons_lowerBound"        : 5,                                            #
+    "neurons_upperBound"        : 512,                                          #
+    # Lower and upper bound for learning rate (float/float)                     #
+    "learning_lowerBound"       : 1e-6,                                         #
+    "learning_upperBound"       : 1e-2,                                         #
+                                                                                #
+    ##### OTHER UTILITIES ##### (bool/bool/int)                                 #
+    "plot_results"              : True,                                         #
+    "save_model"                : True,                                         #
+    # Early stop to avoid overfit:don't touch unless you know what you're doing!#
+    "earlyStop_patience"        : 5,                                            #
+}                                                                               #
+################################################################################
 
-# Dictionary with the instruction for the algorithm:
-settings ={
-    ##### DATA PREPROCESSING SETTINGS ######
-    # Centering and scaling options
-    "centering_method"          : "mean",
-    "scaling_method"            : "auto",
-
-    ##### ANN AND OPTIMIZER SETTINGS #####
-    # Number of epochs for the ANN
-    "network_epochs"            : 500,
-    # Number of iterations for the optimizer
-    "iterations_optimizer"      : 30,
-    # Settings for the first iteration of the optimizer
-    "initial_neurons"           : 16,
-    "initial_layers"            : 1,
-    "initial_activation"        : "relu",
-    "initial_learningRate"      : 1e-4,
-
-    ##### DESIGN SPACE SETTINGS #####
-    # Lower and upper bound for number of layers
-    "layers_lowerBound"         : 1,
-    "layers_upperBound"         : 25,
-    # Lower and upper bound for number of neurons
-    "neurons_lowerBound"        : 5,
-    "neurons_upperBound"        : 512,
-    # Lower and upper bound for learning rate
-    "learning_lowerBound"       : 1e-6,
-    "learning_upperBound"       : 1e-2,
-
-    ##### OTHER UTILITIES #####
-    "plot_results"              : True,
-    "save_model"                : True,
-}
-
-# Check if GPU are available
+# Check if GPUs are available
 gpus = tf.config.list_physical_devices('GPU')
 if gpus:
     print("I am working on GPU")
@@ -116,7 +123,7 @@ newDirName =   "optimizeNetwork" + "_epochs=" + str(settings["iterations_optimiz
 os.mkdir(newDirName)
 os.chdir(newDirName)
 
-# Write down the centering/scaling factors to be used later on
+# Write down the centering/scaling factors in a separate file to be used later on
 import csv
 f = open("mean.csv", 'w')
 writer = csv.writer(f)
@@ -167,8 +174,10 @@ def create_model(layers, neurons, activation, alpha):
         X_train, X_test: training and test samples from input matrix (80/20, respectively).
         y_train, y_test: training and test samples from output matrix (80/20, respectively).
     '''
-
-    X_train, X_test, y_train, y_test = train_test_split(scaled_X, Y, test_size=0.2, random_state=42)
+    # Compute how much is to be used for test:
+    # Tranining ratio (in settings) is in percentage
+    test_ratio = 1-float(settings["training_ratio"])*0.01
+    X_train, X_test, y_train, y_test = train_test_split(scaled_X, Y, test_size=test_ratio, random_state=42)
     model = Sequential()
     # Add all the hidden layers and activate each of them
     for i in range(layers+1):
@@ -206,7 +215,7 @@ def fitness(layers, neurons, activation, alpha):
         # Create a folder to store the training
         log_dir = log_dir_name(layers, neurons, activation, alpha)
         callback_log = TensorBoard(log_dir=log_dir, histogram_freq=0, write_graph=True, write_grads=False, write_images=False)
-        earlyStopping = EarlyStopping(monitor='val_loss', patience=5, verbose=0, mode='min')
+        earlyStopping = EarlyStopping(monitor='val_loss', patience=int(settings["earlyStop_patience"]), verbose=0, mode='min')
         history = model.fit(x= X_train, y= y_train, validation_data=(X_test,y_test), epochs=int(settings["network_epochs"]), batch_size=batchS, callbacks=[callback_log, earlyStopping])
         errorPrediction = history.history['mse'][-1]
         print("Regression error (MSE): {}".format(errorPrediction))
@@ -236,7 +245,7 @@ def fitness(layers, neurons, activation, alpha):
 
 # This is the function of skopt to train the optimizer
 fitness(x= default_parameters)
-search_result = gp_minimize(func=fitness, dimensions=dimensions, acq_func='EI', n_calls=int(settings["iterations_optimizer"]), x0=default_parameters)
+search_result = gp_minimize(func=fitness, dimensions=dimensions, acq_func=str(settings["acquisitionFunction"]), n_calls=int(settings["iterations_optimizer"]), x0=default_parameters)
 
 
 ##### PART 2: plotting the results and saving the model #####
