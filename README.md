@@ -29,7 +29,7 @@ Additional information on the approach can be found in the following papers:
 - Jiang, Y., Chen, X., Kolehmainen, J., Kevrekidis, I. G., Ozel, A., & Sundaresan, S. (2021). Development of data-driven filtered drag model for industrial-scale fluidized beds. Chemical Engineering Science, 230, 116235.
 - Jiang, Y., Kolehmainen, J., Gu, Y., Kevrekidis, Y. G., Ozel, A., & Sundaresan, S. (2019). Neural-network-based filtered drag model for gas-particle flows. Powder Technology, 346, 403-413.
 ```diff
-!# ******* UPDATE 2 - September 2022 *******
+!******* UPDATE 2 - September 2022 *******
 ```
 In the folder 'code_optimization_ANN' I have included a script to train the ANN by means of Bayesian optimization (based on skopt). The script can work with the sample data I have included from our training matrix (see update 1 for additional information).
 IMPORTANT:
@@ -43,7 +43,7 @@ iii) LaTeX: it is needed for plots' labels (please refer to: https://www.latex-p
 
 iv)  Matplotlib: it is needed for plotting (please refer to: https://matplotlib.org).
 ```diff
-!# ******* UPDATE 1 - July 2022 *******
+!******* UPDATE 1 - July 2022 *******
 ```
 In the folder “/test/test_ANN”, I put two additional  files: “sampleX.txt" and “sampleY.txt". These two files correspond to a small batch (2,000 samples, chosen randomly) of the training input and the output matrix, respectively, which can be used to test the network implementation and accuracy in the CFD solver. 
 In addition, I have coded a small Python script to test "offline" the trained architecture using sampleX and sampleY, and I have put it in the same folder (it is the file “testNet.py”). Finally, “prediction_samples.png” is a parity plot to assess the accuracy of the network when sampleX is used as an input. I put this figure as a reference, as theoretically the very same result should be obtained using your own testing framework (as the ANN, the preprocessing factors, and the input/output matrix you will be using are the same loaded/used by the Python script). 
