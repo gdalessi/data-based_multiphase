@@ -35,13 +35,15 @@ In the folder 'code_optimization_ANN' I have included a script to train the ANN 
 IMPORTANT:
 For the script to work, the following dependencies must be satisfied:
 
-i)   scikit-optimize: it is needed for the optimization part (please refer to: https://scikit-optimize.github.io/stable/); 
+i)   scikit-optimize: it is needed for the optimization part (for installation please refer to: https://scikit-optimize.github.io/stable/); 
 
-ii)  OpenMORe: it is needed for data processing (please refer to: (https://github.com/gdalessi/OpenMORe);
+ii)  OpenMORe: it is needed for data processing (for installation please refer to: (https://github.com/gdalessi/OpenMORe);
 
-iii) LaTeX: it is needed for plots' labels (please refer to: https://www.latex-project.org);
+iii) LaTeX: it is needed for plots' labels (for installation please refer to: https://www.latex-project.org);
 
-iv)  Matplotlib: it is needed for plotting (please refer to: https://matplotlib.org).
+iv)  Matplotlib: it is needed for plotting (for installation please refer to: https://matplotlib.org);
+
+v) scikit-learn: it is needed for some utility functions (for installation please refer to: https://scikit-learn.org).
 ```diff
 +******* UPDATE 1 - July 2022 *******
 ```
